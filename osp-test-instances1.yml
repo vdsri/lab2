@@ -1,0 +1,37 @@
+- hosts: jumpbox
+  gather_facts: false
+  tasks:
+
+   - name: Fetch Instance Info
+     os_server_facts:
+      cloud: ospcloud
+      region_name: RegionOne
+     register: result
+   - name: Add host to
+     add_host:
+      name: "{{ item.public_v4 }}"
+      group: "{{ item.metadata.group }}"
+     with_items: "{{result.ansible_facts.openstack_servers}}"
+   - name: Add host
+     add_host:
+      name: "{{ item.public_v4 }}"
+      group: "{{ item.metadata.deployment_name }}"
+     with_items: "{{result.ansible_facts.openstack_servers}}"
+
+- hosts: webservers
+  gather_facts: false
+  become: yes
+  tasks:
+  - name: install apache/httpd
+    yum:
+      name: httpd
+      state: latest
+  - name: start and enable apache/httpd service
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+  - name: create default index.html
+    copy:
+     content: "Hello World"
+     dest: /var/www/html/index.html

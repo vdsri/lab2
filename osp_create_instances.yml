@@ -1,0 +1,12 @@
+- hosts: jumpbox
+  gather_facts: false
+  vars:
+    appserver1_name: app1
+    appserver2_name: app2
+    databaseserver_name: appdb1
+    frontendserver_name: frontend1
+    flavor_name: m1.small
+    webserver_group: webservers
+    database_group: databaseservers
+    frontend_group: frontendservers
+    deployment: dev
